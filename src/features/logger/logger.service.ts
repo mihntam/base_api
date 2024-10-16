@@ -14,12 +14,11 @@ export class LoggerService implements BaseLoggerService {
       new transports.Console({
         handleExceptions: true,
         format: format.combine(
-          format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-          format.errors({ stack: true }),
-          format.cli(),
-          // format.printf(({ timestamp, level, message, context, trace }) => {
-          //   return `${timestamp} [${context}] ${level}: ${message}${trace ? `\n${trace}` : ''}`;
-          // }),
+          // format.cli(),
+          format.colorize({ all: true }),
+          format.printf(({ timestamp, level, message, context, trace }) => {
+            return `[${timestamp}] ${level} [${context}] ${message}${trace ? `\n${trace}` : ''}`;
+          }),
         ),
       }),
     );
@@ -30,10 +29,7 @@ export class LoggerService implements BaseLoggerService {
     //     level: logLevel,
     //     handleExceptions: true,
     //     format: format.combine(
-    //       format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    //       format.errors({ stack: true }),
     //       format.splat(),
-    //       format.json(),
     //     ),
     //   }),
     // );
@@ -42,7 +38,7 @@ export class LoggerService implements BaseLoggerService {
       exitOnError: false,
       level: logLevel,
       format: format.combine(
-        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS A' }),
         format.errors({ stack: true }),
         format.json(),
       ),
@@ -60,5 +56,13 @@ export class LoggerService implements BaseLoggerService {
 
   warn(message: string, context?: string): void {
     this._logger.warn(message, { context });
+  }
+
+  debug?(message: string, context?: string): void {
+    this._logger.debug(message, { context });
+  }
+
+  verbose?(message: string, context?: string): void {
+    this._logger.debug(message, { context });
   }
 }
