@@ -4,12 +4,14 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { setupSwagger } from './setup-swagger';
 import { HttpExceptionFilter } from './utils';
+import { LoggerService } from './features/logger';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   setupSwagger(app);
 
+  app.useLogger(app.get(LoggerService));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
